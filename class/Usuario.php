@@ -71,16 +71,11 @@ class Usuario
 		//ou assim 
 		if(count($results) > 0)
 		{
-			//caso relamente exita no banco
-			//pega o resultado na primeira ou única linha que foi encontrado 
-			$row = $results[0];
+			//chama o metodo para retorna os dados setdata()
+			//passando o resultado no indice 0
+			$this->setData($results[0]);
 
-			//pega os dados e manda para os setters 
-			$this->setIDusuario($row['idusuario']);
-			$this->setDeslogin($row['deslogin']);
-			$this->setDessenha($row['dessenha']);
-			//colocar no formato pt_BR(hotas, data)
-			$this->setDtcadastro(new DateTime($row['dtcadastro']));
+			
 
 		}
 	}
@@ -126,15 +121,12 @@ class Usuario
 		{
 			//caso relamente exita no banco
 			//pega o resultado na primeira ou única linha que foi encontrado 
-			$row = $results[0];
+			//$row = $results[0];. Porém foi susbstituido pelo método abaixo:
 
-			//pega os dados e manda para os setters 
-			$this->setIDusuario($row['idusuario']);
-			$this->setDeslogin($row['deslogin']);
-			$this->setDessenha($row['dessenha']);
-			//colocar no formato pt_BR(hotas, data)
-			$this->setDtcadastro(new DateTime($row['dtcadastro']));
-
+			//chama o metodo para retorna os dados setdata()
+			//passando o resultado no indice 0
+			$this->setData($results[0]);
+			
 		}
 		//caso não tenha nehum resultado
 		else
@@ -143,6 +135,64 @@ class Usuario
 			throw new Exception("Error: Login e/ou senha inválidos.");
 			
 		}
+	}
+
+	//método para retorna os dados do banco de dados  
+	public function setData($data)
+	{
+			//pega os dados e manda para os setters 
+			$this->setIDusuario($data['idusuario']);
+			$this->setDeslogin($data['deslogin']);
+			$this->setDessenha($data['dessenha']);
+			//colocar no formato pt_BR(hotas, data)
+			$this->setDtcadastro(new DateTime($data['dtcadastro']));
+
+	}
+
+
+	//método para inserir 
+	public function insert()
+	{
+		//novo instancia da classe Sql()
+		$sql = new Sql();
+
+		//armazena em results o resultado da CALL, dentro do mysql passando a login e a senha (prosedure)
+		//como é no mysql: a prosedure usa-se com CALL e usa-se parenteses, para o sqlserver é execute
+		$results = $sql->select("CALL sp_usuarios_insert(:LOGIN, :PASSWORD)", array(
+			':LOGIN'=>$this->getDeslogin(),
+			':PASSWORD'=>$this->getDessenha()
+		));
+
+		//verifica se é maior que zero
+		if(count($results) > 0)
+		{
+			$this->setData($results[0]);
+		}
+	}
+
+	//meetod para atualizar no banco de dados 
+	public function update($login, $password)
+	{
+		//definindo dentro do objeto
+		$this->setDeslogin($login);
+		$this->setDessenha($password);
+
+		$sql = new Sql();
+
+		$sql->query("UPDATE tb_usuarios SET deslogin = :LOGIN, dessenha = :PASSWORD WHERE idusuario = :ID", array(
+			//especificando os parametros
+			':LOGIN'=>$this->getDeslogin(),
+			':PASSWORD'=>$this->getDessenha(),
+			':ID'=>$this->getIdusuario()
+		));
+	}
+
+
+	//metodo construtor
+	public function __construct($login = "", $password = "")
+	{
+		$this->setDeslogin($login);
+		$this->setDessenha($password);
 	}
 
 

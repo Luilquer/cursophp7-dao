@@ -45,13 +45,42 @@ echo json_encode($search);
 */
 
 //carrega um usuario usando o login e a senha
-$user = new Usuario();
+/*$user = new Usuario();
 
 //usar o método login();
 $user->login("luilquer","12345678");
 
 //exibe o resultado da consulta no banco de dados 
 echo $user;
+*/
+
+//inserir um usuario novo atraves do metodo construtor
+/*
+$aluno = new Usuario("student", "studen1");
+
+//chama o metodo passando o paramenttro
+//$aluno->setDeslogin("student");
+//mesmo
+//$aluno->setDessenha("studen1");
+
+//chama o metodo insert
+$aluno->insert();
+
+//exibe na tela
+echo $aluno;
+*/
+
+//Atualizando no banco de dados 
+$usuario = new Usuario();
+
+//seleciona o usuario, passanod o id como parametro
+$usuario->loadById(11);
+
+//chama o metodo para atualizar no banco de dados 
+$usuario->update("professor", "!@#$%");
+
+//exibe todos os dados que foram atualizados na tabela 
+echo $usuario;
 
 
  ?>

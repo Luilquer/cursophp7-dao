@@ -16,22 +16,22 @@ class Sql extends PDO
 
 	//método mais global para mudança, recebe o stmt e os dados
 	//parâmetros é um array por padrâo
-	private function setParams($statment, $parametrs = array())
+	private function setParams($statement, $parametrs = array())
 	{
 		//associar os parametros a esse comando, acima
 		//verifica os parâmetros pegando a chave e o valor
 		foreach ($parametrs as $key => $value) 
 		{
 			//chamando o método criado setParam()
-			$this->setParam($key, $value);
+			$this->setParam($statement, $key, $value);
 		}
 	}
 
 	//metodo para apenas um parâmetro, recebendo a chave e o valor
-	private function setParam($statment, $key, $value)
+	private function setParam($statement, $key, $value)
 	{
 		//passando a chave e o valor
-		$statment->bindParam($key, $value);
+		$statement->bindParam($key, $value);
 	}
 
 

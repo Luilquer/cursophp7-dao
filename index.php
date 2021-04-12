@@ -19,13 +19,39 @@ require_once("config.php");
 
 //usar a classe usuario
 
-//cria um novo usuario
+//cria um novo usuario, mas para apenas um
+
+/*
 $root = new Usuario();
 
 $root->loadById(5);
 
 //exibir o root na tela
 echo $root;
+*/
+
+//Carrega uma lista de usuarios
+//a forma de chamar  direto sem precisar instanciar o objeto é relatico ao método static 
+/*$lista = Usuario::getList();
+
+//exibir a lista encontradas no banco de dados 
+//echo json_encode($lista);
+*/
+
+//Carrega uma lista de usuarios buscado pelo login
+/*$search = Usuario::search("lu");
+
+echo json_encode($search);
+*/
+
+//carrega um usuario usando o login e a senha
+$user = new Usuario();
+
+//usar o método login();
+$user->login("luilquer","12345678");
+
+//exibe o resultado da consulta no banco de dados 
+echo $user;
 
 
  ?>

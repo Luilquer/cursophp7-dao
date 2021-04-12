@@ -85,6 +85,67 @@ class Usuario
 		}
 	}
 
+
+	//método para exibir todos os usuarios da tabela
+	// a vantagem do método ser static é não precisar instanciar objetos, ou seja,
+	// pode chamar direto sem precisar utilizar a sintaxe do sistema 
+	public static function getList()
+	{
+		//cria um novo sql
+		$sql = new Sql();
+
+		//retorna a consulta feita no banco de dados 
+		return $sql->select("SELECT * FROM tb_usuarios ORDER BY deslogin;");
+	}
+
+	//Lista através  do Login
+	public static function search($Login)
+	{
+		$sql = new Sql();
+
+		return $sql->select("SELECT * FROM tb_usuarios WHERE deslogin LIKE :SEARCH ORDEr BY deslogin", array(
+			':SEARCH'=>"%".$Login."%"
+		));
+	}
+
+	//obter os dados do usuario autenticado
+	public function login($login, $password)
+	{
+		$sql = new Sql();
+
+		$results = $sql->select("SELECT * FROM tb_usuarios WHERE deslogin = :LOGIN AND dessenha = :PASSWORD", array(
+			":LOGIN"=>$login,
+			":PASSWORD"=>$password
+		));
+
+		//verificar se o resultado do banco de dados existe 
+		//em seguida faz 
+		//if(isset($results[0]): 1 opcão
+		//ou assim 
+		if(count($results) > 0)
+		{
+			//caso relamente exita no banco
+			//pega o resultado na primeira ou única linha que foi encontrado 
+			$row = $results[0];
+
+			//pega os dados e manda para os setters 
+			$this->setIDusuario($row['idusuario']);
+			$this->setDeslogin($row['deslogin']);
+			$this->setDessenha($row['dessenha']);
+			//colocar no formato pt_BR(hotas, data)
+			$this->setDtcadastro(new DateTime($row['dtcadastro']));
+
+		}
+		//caso não tenha nehum resultado
+		else
+		{
+			//lança uma exeção dentro da classe
+			throw new Exception("Error: Login e/ou senha inválidos.");
+			
+		}
+	}
+
+
 	//mostrar na tela
 	public function __toString()
 	{
@@ -96,6 +157,7 @@ class Usuario
 			"dtcadastro"=>$this->getDtcadastro()->format("d/m/Y H:i:s")
 		));
 	}
+
 
 
 

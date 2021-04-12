@@ -71,7 +71,8 @@ echo $aluno;
 */
 
 //Atualizando no banco de dados 
-$usuario = new Usuario();
+
+/*$usuario = new Usuario();
 
 //seleciona o usuario, passanod o id como parametro
 $usuario->loadById(11);
@@ -81,6 +82,18 @@ $usuario->update("professor", "!@#$%");
 
 //exibe todos os dados que foram atualizados na tabela 
 echo $usuario;
+*/
 
+//Apagar dados no banco de dados 
+$usuario = new Usuario();
+
+//selecionando o usuario pelo id
+$usuario->loadById(7);
+
+//chamando o metodo pra deletear no banco de dados 
+$usuario->delete();
+
+//exibir dados no banoc de dados 
+echo $usuario;
 
  ?>
